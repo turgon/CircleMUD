@@ -2101,6 +2101,14 @@ RETSIGTYPE hupsig(int sig)
 				 * substituted */
 }
 
+RETSIGTYPE politequit(int sig)
+{
+  log("SYSERR: Received SIGQUIT.  Shutting down gently...");
+  send_to_all("Shutting down.\r\n");
+  circle_shutdown = 1;
+}
+
+
 #endif	/* CIRCLE_UNIX */
 
 /*
@@ -2173,6 +2181,7 @@ void signal_setup(void)
   my_signal(SIGTERM, hupsig);
   my_signal(SIGPIPE, SIG_IGN);
   my_signal(SIGALRM, SIG_IGN);
+  my_signal(SIGQUIT, politequit);
 }
 
 #endif	/* CIRCLE_UNIX || CIRCLE_MACINTOSH */

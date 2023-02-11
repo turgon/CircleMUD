@@ -1,0 +1,15 @@
+# build artifacts
+bin/
+config.*
+src/*.o
+src/.accepted
+src/Makefile
+src/util/Makefile
+src/conf.h
+
+# runtime artifact
+lib/etc/
+
+# vim dev
+*.swp
+*.swo

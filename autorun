@@ -37,7 +37,7 @@ PORT=4000
 
 # Default flags to pass to the MUD server (see admin.txt for a description
 # of all flags).
-FLAGS='-q'
+FLAGS='-d /data/lib'
 
 # Number of syslog.# files to keep in the log directory.
 BACKLOGS=6
@@ -124,13 +124,6 @@ proc_syslog () {
 # Main #
 ########
 
-# Check to see if there is a syslog which would indicate that autorun
-# was improperly killed (ie maybe the system was rebooted or ?).
-if [ -s syslog ]; then
-  echo Improper shutdown of autorun detected, rotating syslogs before startup. >> syslog
-  proc_syslog
-fi
-
 # The main loop
 while ( : ) do
 
@@ -140,13 +133,12 @@ while ( : ) do
 
   # On Cygwin, you may need to precede this next line with './' for
   # './bin/circle' as the command.
-  bin/circle $FLAGS $PORT >> syslog 2>&1
+  bin/circle $FLAGS $PORT 2>&1
 
   if [ -r .killscript ]; then
     DATE=`date`;
     echo "autoscript killed $DATE"  >> syslog
     rm .killscript
-    proc_syslog
     exit
   fi
 
@@ -160,7 +152,6 @@ while ( : ) do
     sleep 60
   done
 
-  proc_syslog
   sleep 5
 
 done

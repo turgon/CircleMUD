@@ -1,0 +1,29 @@
+# fly.toml file generated for circlemud on 2023-02-11T12:28:50-08:00
+
+app = "circlemud"
+kill_signal = "SIGQUIT"
+kill_timeout = 5
+processes = []
+
+[env]
+
+[experimental]
+  auto_rollback = true
+
+[mounts]
+  source="circledata"
+  destination="/data"
+
+[[services]]
+  http_checks = []
+  internal_port = 4000
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    port = 4000
